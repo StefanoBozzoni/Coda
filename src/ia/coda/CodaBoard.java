@@ -32,7 +32,6 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
     @Override
     public void onButtonOkGuessedField(int numberoftile, Colore color, JLabel label) {
-
         if (isPlayer1Turn) {
             //String s = JOptionPane.showInputDialog("Guess the tile number");
             System.out.println(label.getName());
@@ -66,7 +65,6 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                     labelDrew.revalidate();
                     pack();
                 }
-
             } else {
                 isPlayer1Turn = false;
                 javax.swing.JOptionPane.showMessageDialog(null, "Opss! Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -74,7 +72,6 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 tileToAddlbl.setIcon(labelDrew.getIcon());
                 tileToAddlbl.setName(labelDrew.getName());
                 fieldpanel.add(tileToAddlbl);
-
                 labelDrew.setIcon(null);
                 labelDrew.revalidate();
                 pack();
