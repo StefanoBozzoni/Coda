@@ -5,6 +5,7 @@
  */
 package ia.coda;
 
+import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -18,6 +19,17 @@ public class Game {
     private Deck deck;
     private int currentPlayer = 1;
     private int currentRound;
+    private boolean userStartGuessing = false;
+    private boolean playerCanDraw;
+    private Tile tileDrew; 
+
+    public Tile getTileDrew() {
+        return tileDrew;
+    }
+
+    public void setTileDrew(Tile tileDrew) {
+        this.tileDrew = tileDrew;
+    }
 
     public Game() {
         deck = new Deck();
@@ -29,12 +41,35 @@ public class Game {
         distribute();
         players[0].sortPlayerTiles();
         players[1].sortPlayerTiles();
+        userStartGuessing = false;
+        playerCanDraw = true;
+    }
 
+    public boolean canPlayerDraw() {
+        return playerCanDraw;
+    }
+
+    public void playerCanDraw(boolean canDraw) {
+        this.playerCanDraw = canDraw;
+    }
+
+    public boolean canUserStartGuessing() {
+        return userStartGuessing;
+    }
+
+    public void setUserCanGuess() {
+        this.userStartGuessing = true;
     }
 
     void shuffle(Deck mydeck) {
         mydeck.shuffle();
     }
+    
+    boolean isPlayer1Turn() {
+        return (currentPlayer==1);
+    }
+    
+
 
     void distribute() {
         Tile[] array = deck.distribute();
@@ -55,6 +90,10 @@ public class Game {
     Tile draw(Deck mydeck) {
         return mydeck.draw();
     }
+    
+    Tile draw() {
+        return deck.draw();
+    }
 
     public Player[] getPlayers() {
         return players;
@@ -64,12 +103,22 @@ public class Game {
         return deck;
     }
 
-    public int getCurrentPlayer() {
+    public int getCurrentPlayerNum() {
         return currentPlayer;
     }
-
+    
+    public Player getCurrentPlayer() {
+        return players[currentPlayer];
+    }
+    
+    //
     public int getCurrentRound() {
         return currentRound;
+    }
+    //
+    public void nextTurn() {
+        if (currentPlayer==1) currentPlayer=2; else currentPlayer=1; 
+        currentRound++;
     }
 
 }
