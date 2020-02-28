@@ -24,28 +24,30 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace pref="20" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                      <Component id="TileNumber" min="-2" max="-2" attributes="0"/>
-                      <Component id="TileNumberField" min="-2" pref="355" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="TileColourField" max="32767" attributes="0"/>
-                      <Group type="102" alignment="1" attributes="0">
-                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="287" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
               <Component id="OKbutton" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Component id="Cancelbutton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="20" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="TileNumber" min="-2" max="-2" attributes="0"/>
+                              <Component id="tileNumberField" min="-2" pref="355" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="tileColourField" alignment="1" min="-2" pref="352" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="jLabel2" min="-2" pref="252" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="106" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
           </Group>
       </Group>
     </DimensionLayout>
@@ -55,11 +57,11 @@
               <EmptySpace pref="27" max="32767" attributes="0"/>
               <Component id="TileNumber" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="TileNumberField" min="-2" pref="38" max="-2" attributes="0"/>
+              <Component id="tileNumberField" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="TileColourField" min="-2" pref="38" max="-2" attributes="0"/>
+              <Component id="tileColourField" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="OKbutton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -73,27 +75,33 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="TileNumber">
       <Properties>
-        <Property name="text" type="java.lang.String" value="TileNumber"/>
+        <Property name="text" type="java.lang.String" value="Insert a number: from 0 to 11"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="TileColour"/>
+        <Property name="text" type="java.lang.String" value="Insert a color: black or white"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="TileNumberField">
+    <Component class="javax.swing.JTextField" name="tileNumberField">
     </Component>
-    <Component class="javax.swing.JTextField" name="TileColourField">
+    <Component class="javax.swing.JTextField" name="tileColourField">
     </Component>
     <Component class="javax.swing.JButton" name="OKbutton">
       <Properties>
         <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OKbuttonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="Cancelbutton">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelbuttonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

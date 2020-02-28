@@ -9,17 +9,20 @@ package ia.coda;
  *
  * @author silviogao
  */
-import static ia.coda.colore.*;
+import static ia.coda.Colore.*;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Deck {
+public class Deck implements Serializable {
 
     final static int TOTAL_NUMBERS_OF_TILES = 24;
     Tile[] tiles = new Tile[TOTAL_NUMBERS_OF_TILES];
     int numberoftiles = TOTAL_NUMBERS_OF_TILES;
 
     Tile draw() {
-        return tiles[numberoftiles--];
+        numberoftiles--;
+        return tiles[numberoftiles];
+        
     }
 
     void shuffle() {
@@ -45,6 +48,7 @@ public class Deck {
             tiles[numberoftiles - 1 - i] = null;
             //System.out.println("[" + returnarray[i].getNumtile() + "," + returnarray[i].getColor_tile()+"]");
         } 
+        numberoftiles=numberoftiles-8;
         return returnarray;
     }
 

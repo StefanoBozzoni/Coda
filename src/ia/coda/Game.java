@@ -1,10 +1,12 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template 
+file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ia.coda;
 
+import java.io.Serializable;
 import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -13,7 +15,7 @@ import javax.swing.JLabel;
  *
  * @author silviogao
  */
-public class Game {
+public class Game implements Serializable {
 
     private Player[] players;
     private Deck deck;
@@ -21,7 +23,9 @@ public class Game {
     private int currentRound;
     private boolean userStartGuessing = false;
     private boolean playerCanDraw;
-    private Tile tileDrew; 
+    private Tile tileDrew;
+    private Tile[] boardTiles = new Tile[Deck.TOTAL_NUMBERS_OF_TILES];
+    private int numTilesInBoard=0;
 
     public Tile getTileDrew() {
         return tileDrew;
@@ -68,8 +72,6 @@ public class Game {
     boolean isPlayer1Turn() {
         return (currentPlayer==1);
     }
-    
-
 
     void distribute() {
         Tile[] array = deck.distribute();
@@ -115,10 +117,22 @@ public class Game {
     public int getCurrentRound() {
         return currentRound;
     }
-    //
+    
     public void nextTurn() {
         if (currentPlayer==1) currentPlayer=2; else currentPlayer=1; 
         currentRound++;
+    }
+    
+    public void addTileToBoard(Tile tile) {
+        boardTiles[numTilesInBoard++]=tile;
+    }
+   
+    public Tile[] getboardTiles() {
+        return boardTiles;
+    }
+    
+    public int getNumOfBoardTiles() {
+        return numTilesInBoard;
     }
 
 }

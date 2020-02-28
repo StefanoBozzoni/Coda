@@ -5,9 +5,10 @@
  */
 package ia.coda;
 
-import static ia.coda.colore.*;
+import static ia.coda.Colore.*;
+import java.io.Serializable;
 
-enum colore {
+enum Colore {
     BLACK,
     WHITE
 }
@@ -16,18 +17,18 @@ enum colore {
  *
  * @author silviogao
  */
-public class Tile {
+public class Tile implements Serializable {
 
-    private colore color_tile;
+    private Colore color_tile;
     private int numtile;
     
     private boolean covered = true;
 
-    Tile(int ptile, colore pcolor) {
+    Tile(int ptile, Colore pcolor) {
         this(ptile, pcolor, true);
     }
 
-    Tile(int ptile, colore pcolor, boolean pcovered) {
+    Tile(int ptile, Colore pcolor, boolean pcovered) {
         numtile = ptile;
         color_tile = pcolor;
         covered = pcovered;
@@ -41,7 +42,7 @@ public class Tile {
         covered = true;
     }
 
-    public colore getColor_tile() {
+    public Colore getColor_tile() {
         return color_tile;
     }
 

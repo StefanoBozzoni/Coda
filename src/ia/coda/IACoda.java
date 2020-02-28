@@ -5,7 +5,7 @@
  */
 package ia.coda;
 
-import static ia.coda.colore.*;
+import static ia.coda.Colore.*;
 /**
  *
  * @author silviogao

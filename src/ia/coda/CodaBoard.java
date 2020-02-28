@@ -18,7 +18,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import ia.coda.GuessField.*;
+import java.text.FieldPosition;
 import java.util.Random;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -26,12 +28,13 @@ import java.util.Random;
  */
 public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
-    boolean changeismade = false;
-    Game codaGame;
-    boolean isPlayer1Turn = true;
+    private boolean changeismade = false;
+    private Game codaGame;
+    private boolean isPlayer1Turn = true;
 
     @Override
     public void onButtonOkGuessedField(int numberoftile, Colore color, JLabel label) {
+
         if (isPlayer1Turn) {
             //String s = JOptionPane.showInputDialog("Guess the tile number");
             System.out.println(label.getName());
@@ -45,7 +48,11 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
             String colorTile = String.valueOf(clickedTile.getColor_tile());
 
             if ((numTile.equals(String.valueOf(numberoftile)) && (colorTile.equals(String.valueOf(color))))) {
+
+                //TODO: Remove the clicked tile from the player, reorder the tiles
                 fieldpanel.add(label);
+                //TODO: Add the tile to the board, reorder the tiles ?
+
                 changeismade = true;
                 pack();
                 int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -55,7 +62,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                     JLabel tileToAddlbl = new JLabel("");
                     tileToAddlbl.setIcon(labelDrew.getIcon());
                     tileToAddlbl.setName("Label_" + codaGame.getCurrentPlayer().getNumTiles());
-                    Player1Panel.add(tileToAddlbl);
+                    player1Panel.add(tileToAddlbl);
 
                     Player player = codaGame.getCurrentPlayer();
                     Tile drewTile = codaGame.getTileDrew();
@@ -63,6 +70,8 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
                     labelDrew.setIcon(null);
                     labelDrew.revalidate();
+
+                    //TODO: Reorder tiles and redraw game
                     pack();
                 }
             } else {
@@ -74,6 +83,8 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 fieldpanel.add(tileToAddlbl);
                 labelDrew.setIcon(null);
                 labelDrew.revalidate();
+                //TODO: Add the tile to the board
+
                 pack();
                 codaGame.playerCanDraw(true);
                 codaGame.nextTurn();
@@ -88,11 +99,13 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     public CodaBoard() {
         initComponents();
         codaGame = new Game();
+        setMainListeners();
         displayGame();
     }
 
     void saveGame() {
-
+        ObjectWriter.saveGame(codaGame);
+        JOptionPane.showMessageDialog(this, "Game saved successfully", "info", JOptionPane.OK_OPTION);
     }
 
     void doGamePlayer2() {
@@ -127,11 +140,11 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Draw = new javax.swing.JButton();
+        draw = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        Player1Panel = new javax.swing.JPanel();
+        player1Panel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        Player2Panel = new javax.swing.JPanel();
+        player2Panel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -140,6 +153,10 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         jLabel5 = new javax.swing.JLabel();
         NumberOfRounds = new javax.swing.JLabel();
         labelDrew = new javax.swing.JLabel();
+        btnCelarBoard = new javax.swing.JButton();
+        btnNewGame = new javax.swing.JButton();
+        btnSaveGame = new javax.swing.JButton();
+        btnLoadGame = new javax.swing.JButton();
         MenuBar = new javax.swing.JMenuBar();
         File = new javax.swing.JMenu();
         New = new javax.swing.JMenuItem();
@@ -156,20 +173,20 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
             }
         });
 
-        Draw.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ia/coda/cover.png"))); // NOI18N
-        Draw.addActionListener(new java.awt.event.ActionListener() {
+        draw.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ia/coda/cover.png"))); // NOI18N
+        draw.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DrawActionPerformed(evt);
+                drawActionPerformed(evt);
             }
         });
 
-        Player1Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-        jScrollPane1.setViewportView(Player1Panel);
+        player1Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        jScrollPane1.setViewportView(player1Panel);
 
-        Player2Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-        Player2Panel.add(jLabel1);
+        player2Panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        player2Panel.add(jLabel1);
 
-        jScrollPane2.setViewportView(Player2Panel);
+        jScrollPane2.setViewportView(player2Panel);
 
         jLabel2.setText("TILE DREW");
 
@@ -181,6 +198,35 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
         NumberOfRounds.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
         NumberOfRounds.setText("N");
+
+        btnCelarBoard.setText("clear game");
+        btnCelarBoard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCelarBoardActionPerformed(evt);
+            }
+        });
+
+        btnNewGame.setText("new game");
+        btnNewGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewGameActionPerformed(evt);
+            }
+        });
+
+        btnSaveGame.setText("save game");
+        btnSaveGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveGameActionPerformed(evt);
+            }
+        });
+
+        btnLoadGame.setText("load game");
+        btnLoadGame.setToolTipText("");
+        btnLoadGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadGameActionPerformed(evt);
+            }
+        });
 
         File.setText("File");
 
@@ -226,7 +272,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Draw, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(draw, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -236,15 +282,26 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel2)
-                        .addComponent(labelDrew, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(117, Short.MAX_VALUE))
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(77, 77, 77)
+                                .addComponent(jLabel3))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel2)
+                                .addComponent(labelDrew, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(117, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnLoadGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnSaveGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnNewGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCelarBoard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(56, 56, 56))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -256,7 +313,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                             .addComponent(jLabel5)
                             .addComponent(NumberOfRounds, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(101, 101, 101)
-                        .addComponent(Draw, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(draw, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -264,7 +321,14 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                                 .addGap(39, 39, 39)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(132, 132, 132)
+                                .addComponent(btnCelarBoard)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnNewGame)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSaveGame)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnLoadGame)
+                                .addGap(5, 5, 5)
                                 .addComponent(jLabel3)
                                 .addGap(34, 34, 34)
                                 .addComponent(jLabel2)
@@ -272,7 +336,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                                 .addComponent(labelDrew, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -311,10 +375,9 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         setVisible(true);
     }
 
-    void displayGame() {
-
+    void setMainListeners() {
         //Problem with displaying Tiles
-        Draw.addMouseListener(new MouseAdapter() {
+        draw.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (codaGame.canPlayerDraw()) {
@@ -344,20 +407,26 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         }
         );
 
-        for (int i = 0; i < 4; i++) {
-            JLabel label = new JLabel();
-            Tile currentTile = codaGame.getPlayers()[0].getPlayerTiles()[i];
-            label.setIcon(new ImageIcon("./" + currentTile.getFileName()));
-            Player1Panel.add(label);
+    }
 
+    void displayGame() {
+
+        Player player1 = codaGame.getPlayers()[0];
+        Player player2 = codaGame.getPlayers()[1];
+
+        for (int i = 0; i < player1.getNumTiles(); i++) {
+            JLabel label = new JLabel();
+            Tile currentTile = player1.getPlayerTiles()[i];
+            label.setIcon(new ImageIcon("./" + currentTile.getFileName()));
+            player1Panel.add(label);
         }
 
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < player2.getNumTiles(); j++) {
             JLabel label = new JLabel();
-            Tile currentTile = codaGame.getPlayers()[1].getPlayerTiles()[j];
+            Tile currentTile = player2.getPlayerTiles()[j];
             label.setIcon(new ImageIcon("./" + currentTile.getFileName()));
             label.setName("Label_" + j);
-            Player2Panel.add(label);
+            player2Panel.add(label);
 
             IGuessedField thisForm = this;
 
@@ -370,7 +439,6 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                             if (codaGame.canUserStartGuessing()) {
                                 new GuessField().show(thisForm, label);
                             }
-
                         }
                     });
 
@@ -378,25 +446,27 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
             });
         }
 
+        //TODO: Display all the board tiles here
+        
+        
+        if (codaGame.getTileDrew() != null) {
+            Tile tileDrew = codaGame.getTileDrew();
+            labelDrew.setIcon(new ImageIcon("./" + tileDrew.getFileName()));
+            labelDrew.setName("label_" + tileDrew.getNumtile());
+        }
+
         pack();
     }
 
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
-        boolean doNotWantToSave = false;
-        if (doNotWantToSave) {
-            System.exit(0);
-        }
+        endGame();
     }//GEN-LAST:event_formWindowClosing
 
     private void NewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewActionPerformed
-
         initGame();
-
     }//GEN-LAST:event_NewActionPerformed
 
-    private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
+    private void endGame() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int dialogueButton = 0;
         int dialogueInput = 0;
@@ -410,7 +480,10 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 System.exit(0);
             }
         }
+    }
 
+    private void ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitActionPerformed
+        endGame();
     }//GEN-LAST:event_ExitActionPerformed
 
     private void InstructionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InstructionsActionPerformed
@@ -432,9 +505,32 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 + " Keep guessing without drawing tiles");
     }//GEN-LAST:event_InstructionsActionPerformed
 
-    private void DrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrawActionPerformed
+    private void drawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_DrawActionPerformed
+    }//GEN-LAST:event_drawActionPerformed
+
+    private void btnCelarBoardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCelarBoardActionPerformed
+        clearGameBoard();
+
+    }//GEN-LAST:event_btnCelarBoardActionPerformed
+
+    private void btnNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewGameActionPerformed
+        clearGameBoard();
+        codaGame = new Game();
+        displayGame();
+    }//GEN-LAST:event_btnNewGameActionPerformed
+
+    private void btnSaveGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveGameActionPerformed
+
+        saveGame();
+    }//GEN-LAST:event_btnSaveGameActionPerformed
+
+    private void btnLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadGameActionPerformed
+        clearGameBoard();
+        Game codaGame = ObjectReader.loadGame();
+        displayGame();
+    }//GEN-LAST:event_btnLoadGameActionPerformed
+
     void closingMethod() {
         // check flag status for changes made
         int roundResult = 0;
@@ -491,8 +587,20 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         });
     }
 
+    private void clearGameBoard() {
+        player1Panel.removeAll();
+        player1Panel.revalidate();
+        player1Panel.repaint();
+        player2Panel.removeAll();
+        player2Panel.revalidate();
+        player2Panel.repaint();
+        labelDrew.setIcon(null);
+        fieldpanel.removeAll();
+        fieldpanel.revalidate();
+        fieldpanel.repaint();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Draw;
     private javax.swing.JMenuItem Exit;
     private javax.swing.JMenu File;
     private javax.swing.JMenu Help;
@@ -500,9 +608,12 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenuItem New;
     private javax.swing.JLabel NumberOfRounds;
-    private javax.swing.JPanel Player1Panel;
-    private javax.swing.JPanel Player2Panel;
     private javax.swing.JMenuItem Save;
+    private javax.swing.JButton btnCelarBoard;
+    private javax.swing.JButton btnLoadGame;
+    private javax.swing.JButton btnNewGame;
+    private javax.swing.JButton btnSaveGame;
+    private javax.swing.JButton draw;
     private javax.swing.JPanel fieldpanel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -512,5 +623,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel labelDrew;
+    private javax.swing.JPanel player1Panel;
+    private javax.swing.JPanel player2Panel;
     // End of variables declaration//GEN-END:variables
 }

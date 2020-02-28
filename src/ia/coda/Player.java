@@ -6,13 +6,14 @@
 package ia.coda;
 
 import static java.util.Arrays.sort;
-import static ia.coda.colore.*;
+import static ia.coda.Colore.*;
+import java.io.Serializable;
 
 /**
  *
  * @author silviogao
  */
-public class Player {
+public class Player implements Serializable {
 
     private final int playernum;
     private Tile[] playerTiles = new Tile[Deck.TOTAL_NUMBERS_OF_TILES];
@@ -41,9 +42,9 @@ public class Player {
     Tile[] sortPlayerTiles() {
         Tile[] myTiles = playerTiles;
 
-        boolean finito = false;
-        while (!finito) {
-            finito = true;
+        boolean finish = false;
+        while (!finish) {
+            finish = true;
             for (int j = 0; j < numTiles - 1; j++) {
                 int color1 = myTiles[j].getColor_tile().ordinal();
                 int color2 = myTiles[j+1].getColor_tile().ordinal();
@@ -55,14 +56,14 @@ public class Player {
                             temp = myTiles[j];
                             myTiles[j] = myTiles[j + 1];
                             myTiles[j + 1] = temp;
-                            finito = false;
+                            finish = false;
                         }
                     } else {
                         Tile temp;
                         temp = myTiles[j];
                         myTiles[j] = myTiles[j + 1];
                         myTiles[j + 1] = temp;
-                        finito = false;
+                        finish = false;
                     }
                 }
 
@@ -81,5 +82,10 @@ public class Player {
 
     public int getNumTiles() {
         return numTiles;
+    }
+    
+    public void addTile(int num, Colore c) {
+        playerTiles[numTiles] = new Tile(num, c);
+        numTiles=playerTiles.length;
     }
 }

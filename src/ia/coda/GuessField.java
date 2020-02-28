@@ -5,17 +5,29 @@
  */
 package ia.coda;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 /**
  *
  * @author silviogao
  */
 public class GuessField extends javax.swing.JFrame {
+    
+    private IGuessedField mCaller;    
+    private JLabel mLabel;
+    
+    interface IGuessedField{
+        void onButtonOkGuessedField(int numberoftile, Colore color, JLabel label);
+        
+    }
 
     /**
      * Creates new form GuessField
      */
     public GuessField() {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -29,43 +41,54 @@ public class GuessField extends javax.swing.JFrame {
 
         TileNumber = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        TileNumberField = new javax.swing.JTextField();
-        TileColourField = new javax.swing.JTextField();
+        tileNumberField = new javax.swing.JTextField();
+        tileColourField = new javax.swing.JTextField();
         OKbutton = new javax.swing.JButton();
         Cancelbutton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        TileNumber.setText("TileNumber");
+        TileNumber.setText("Insert a number: from 0 to 11");
 
-        jLabel2.setText("TileColour");
+        jLabel2.setText("Insert a color: black or white");
 
         OKbutton.setText("OK");
+        OKbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OKbuttonActionPerformed(evt);
+            }
+        });
 
         Cancelbutton.setText("Cancel");
+        Cancelbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelbuttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(TileNumber)
-                        .addComponent(TileNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(TileColourField)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(287, 287, 287))))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addComponent(OKbutton)
                 .addGap(31, 31, 31)
                 .addComponent(Cancelbutton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(TileNumber)
+                                .addComponent(tileNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tileColourField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(106, 106, 106))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,11 +96,11 @@ public class GuessField extends javax.swing.JFrame {
                 .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(TileNumber)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TileNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tileNumberField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(TileColourField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tileColourField, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(OKbutton)
@@ -87,6 +110,38 @@ public class GuessField extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void OKbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKbuttonActionPerformed
+        try {
+           int num = Integer.valueOf(tileNumberField.getText());
+           Colore color = null;
+           if (tileColourField.getText().equals("white")){
+               color = Colore.WHITE;
+           }
+           if (tileColourField.getText().equals("black")){
+               color= Colore.BLACK;
+           }
+           
+           mCaller.onButtonOkGuessedField(num,color, mLabel);
+           this.dispose();
+        }
+        catch (Exception e) {
+        }
+        
+// TODO add your handling code here:
+    }//GEN-LAST:event_OKbuttonActionPerformed
+
+    private void CancelbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelbuttonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelbuttonActionPerformed
+
+    
+    public void show(IGuessedField caller, JLabel label) {
+        mCaller = caller;
+        mLabel = label;
+        setVisible(true);
+       
+    }
 
     /**
      * @param args the command line arguments
@@ -114,7 +169,6 @@ public class GuessField extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GuessField.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -127,9 +181,9 @@ public class GuessField extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelbutton;
     private javax.swing.JButton OKbutton;
-    private javax.swing.JTextField TileColourField;
     private javax.swing.JLabel TileNumber;
-    private javax.swing.JTextField TileNumberField;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField tileColourField;
+    private javax.swing.JTextField tileNumberField;
     // End of variables declaration//GEN-END:variables
 }
