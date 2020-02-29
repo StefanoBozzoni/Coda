@@ -127,7 +127,7 @@ public class Game implements Serializable {
         boardTiles[numTilesInBoard++]=tile;
     }
    
-    public Tile[] getboardTiles() {
+    public Tile[] getBoardTiles() {
         return boardTiles;
     }
     

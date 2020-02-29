@@ -66,10 +66,25 @@ public class Player implements Serializable {
                         finish = false;
                     }
                 }
-
             }
         }
         return myTiles;
+    }
+    
+    public void deletePlayerTile(Tile aTile) {
+        for (int i = 0;i<numTiles;i++) {
+            if (playerTiles[i].getNumtile()==aTile.getNumtile() && playerTiles[i].getColor_tile()==aTile.getColor_tile() ) {
+                playerTiles[i] = null;
+                shiftPositionsByOneStartingAt(i);
+            }
+        }
+    }
+    
+    private void shiftPositionsByOneStartingAt(int i) {
+        while (i<numTiles) {
+            playerTiles[i]=playerTiles[i+1];
+        }
+        numTiles--;
     }
 
     public int getPlayernum() {
