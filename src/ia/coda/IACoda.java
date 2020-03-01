@@ -18,6 +18,7 @@ public class IACoda {
     public static void main(String[] args) {
         // TODO code application logic here
         
+    //StartFrame gameForm = new StartFrame();
     CodaBoard gameForm = new CodaBoard();
     gameForm.setVisible(true);
     }

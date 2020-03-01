@@ -17,7 +17,7 @@ enum Colore {
  *
  * @author silviogao
  */
-public class Tile implements Serializable {
+public class Tile implements Serializable{
 
     private Colore color_tile;
     private int numtile;

@@ -13,7 +13,7 @@ import java.io.Serializable;
  *
  * @author silviogao
  */
-public class Player implements Serializable {
+public class Player implements Serializable{
 
     private final int playernum;
     private Tile[] playerTiles = new Tile[Deck.TOTAL_NUMBERS_OF_TILES];
@@ -39,7 +39,7 @@ public class Player implements Serializable {
         playerTiles[numTiles++] = drawedTile;
     }
 
-    Tile[] sortPlayerTiles() {
+    public Tile[] sortPlayerTiles() {
         Tile[] myTiles = playerTiles;
 
         boolean finish = false;
@@ -66,25 +66,10 @@ public class Player implements Serializable {
                         finish = false;
                     }
                 }
+
             }
         }
         return myTiles;
-    }
-    
-    public void deletePlayerTile(Tile aTile) {
-        for (int i = 0;i<numTiles;i++) {
-            if (playerTiles[i].getNumtile()==aTile.getNumtile() && playerTiles[i].getColor_tile()==aTile.getColor_tile() ) {
-                playerTiles[i] = null;
-                shiftPositionsByOneStartingAt(i);
-            }
-        }
-    }
-    
-    private void shiftPositionsByOneStartingAt(int i) {
-        while (i<numTiles) {
-            playerTiles[i]=playerTiles[i+1];
-        }
-        numTiles--;
     }
 
     public int getPlayernum() {
@@ -101,6 +86,26 @@ public class Player implements Serializable {
     
     public void addTile(int num, Colore c) {
         playerTiles[numTiles] = new Tile(num, c);
-        numTiles=playerTiles.length;
+        numTiles++;
+    }
+
+    void deleteTile(Tile chosenTile) {
+        int foundIndex=-1;
+         for (int i = 0; i <numTiles; i++){
+             if (playerTiles[i].getNumtile() == chosenTile.getNumtile() && playerTiles[i].getColor_tile() == chosenTile.getColor_tile()){
+                 playerTiles[i] = null;
+                 foundIndex=i;
+                 break;
+             }
+         }   
+         if (foundIndex!=-1) shiftNextPosition(foundIndex);
+         numTiles--;
+    }
+    void shiftNextPosition(int startingPos){
+        int i = startingPos;
+        while (i < numTiles){
+            playerTiles[i] = playerTiles[i+1];
+            i++;
+        }
     }
 }

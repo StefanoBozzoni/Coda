@@ -1,7 +1,6 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template 
-file, choose Tools | Templates
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package ia.coda;
@@ -11,11 +10,12 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+
 /**
  *
  * @author silviogao
  */
-public class Game implements Serializable {
+public class Game implements Serializable{
 
     private Player[] players;
     private Deck deck;
@@ -23,16 +23,22 @@ public class Game implements Serializable {
     private int currentRound;
     private boolean userStartGuessing = false;
     private boolean playerCanDraw;
-    private Tile tileDrew;
+    private Tile tileDrew; 
     private Tile[] boardTiles = new Tile[Deck.TOTAL_NUMBERS_OF_TILES];
     private int numTilesInBoard=0;
+
 
     public Tile getTileDrew() {
         return tileDrew;
     }
 
     public void setTileDrew(Tile tileDrew) {
-        this.tileDrew = tileDrew;
+        if (tileDrew!=null) {
+            Tile t = new Tile(tileDrew.getNumtile(),tileDrew.getColor_tile());
+            this.tileDrew = t;
+        }
+        else
+            this.tileDrew=null;
     }
 
     public Game() {
@@ -47,6 +53,8 @@ public class Game implements Serializable {
         players[1].sortPlayerTiles();
         userStartGuessing = false;
         playerCanDraw = true;
+        currentRound = 1;
+        
     }
 
     public boolean canPlayerDraw() {
@@ -61,8 +69,8 @@ public class Game implements Serializable {
         return userStartGuessing;
     }
 
-    public void setUserCanGuess() {
-        this.userStartGuessing = true;
+    public void setUserCanGuess(boolean canGuess) {
+        this.userStartGuessing = canGuess;
     }
 
     void shuffle(Deck mydeck) {
@@ -72,7 +80,7 @@ public class Game implements Serializable {
     boolean isPlayer1Turn() {
         return (currentPlayer==1);
     }
-
+   
     void distribute() {
         Tile[] array = deck.distribute();
         Tile[] array1 = new Tile[4];
@@ -113,18 +121,20 @@ public class Game implements Serializable {
         return players[currentPlayer];
     }
     
-    //
     public int getCurrentRound() {
         return currentRound;
     }
-    
-    public void nextTurn() {
-        if (currentPlayer==1) currentPlayer=2; else currentPlayer=1; 
+    public void nextTurn(){
+        if(currentPlayer==1){
+            currentPlayer=2;
+        }else{
+            currentPlayer=1;
+        }
         currentRound++;
     }
-    
     public void addTileToBoard(Tile tile) {
-        boardTiles[numTilesInBoard++]=tile;
+        Tile t = new Tile(tile.getNumtile(),tile.getColor_tile());
+        boardTiles[numTilesInBoard++]=t;
     }
    
     public Tile[] getBoardTiles() {

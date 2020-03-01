@@ -8,16 +8,19 @@ package ia.coda;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.File;
 
 public class ObjectReader {
 
     public static Game loadGame() {
 
         ObjectReader obj = new ObjectReader();
-
-        Game codaGame = obj.deserialzeGame("c:\\tmp\\codagame.ser");
-
-        //System.out.println(codaGame);
+        
+        File f = new File(".\\codagame.ser");
+        Game codaGame=null;
+        if (f.exists())
+           codaGame = obj.deserialzeGame(f.getPath());
+        
         return codaGame;
 
     }

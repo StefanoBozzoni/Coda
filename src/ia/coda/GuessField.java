@@ -5,6 +5,7 @@
  */
 package ia.coda;
 
+import java.io.Serializable;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -121,8 +122,9 @@ public class GuessField extends javax.swing.JFrame {
            if (tileColourField.getText().equals("black")){
                color= Colore.BLACK;
            }
-           
+           this.dispose();
            mCaller.onButtonOkGuessedField(num,color, mLabel);
+           //setVisible(false);
            this.dispose();
         }
         catch (Exception e) {

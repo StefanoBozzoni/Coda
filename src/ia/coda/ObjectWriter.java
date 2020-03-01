@@ -24,7 +24,7 @@ public class ObjectWriter {
 		FileOutputStream fout = null;
 		ObjectOutputStream oos = null;
 		try {
-			fout = new FileOutputStream("c:\\tmp\\codagame.ser");
+			fout = new FileOutputStream(".\\codagame.ser");
 			oos = new ObjectOutputStream(fout);
 			oos.writeObject(game);
 			System.out.println("Done");
