@@ -51,6 +51,7 @@ public class Tile implements Serializable{
     }
     
     public String getFileName(){
+        //TODO: 1) if the tile is covered (covered==true) return a covered image file otherwhise leave the actual beahaviour
         if (color_tile == BLACK){
             return "/images/Tile" + numtile + ".png";
         }

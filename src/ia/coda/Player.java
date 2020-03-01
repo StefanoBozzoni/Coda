@@ -84,8 +84,8 @@ public class Player implements Serializable{
         return numTiles;
     }
     
-    public void addTile(int num, Colore c) {
-        playerTiles[numTiles] = new Tile(num, c);
+    public void addTile(int num, Colore c) { //TODO: 6) pass also the covered parameter in input and use it in the next Tile constructor, change the program to call the new addTile properly
+        playerTiles[numTiles] = new Tile(num, c); 
         numTiles++;
     }
 
@@ -108,4 +108,7 @@ public class Player implements Serializable{
             i++;
         }
     }
+    
+    //TODO: 2) make a method called "coverAllTiles" that set all the tiles in playerTiles as covered, calling the apposite Tile Method 
+    
 }

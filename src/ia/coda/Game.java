@@ -34,6 +34,7 @@ public class Game implements Serializable{
 
     public void setTileDrew(Tile tileDrew) {
         if (tileDrew!=null) {
+            //TODO: 3) set the tileDrew as covered passing the right parameter in the following Tile costructor
             Tile t = new Tile(tileDrew.getNumtile(),tileDrew.getColor_tile());
             this.tileDrew = t;
         }
@@ -51,6 +52,7 @@ public class Game implements Serializable{
         distribute();
         players[0].sortPlayerTiles();
         players[1].sortPlayerTiles();
+        //TODO: 4) cover the player2 tiles calling the apposite player method
         userStartGuessing = false;
         playerCanDraw = true;
         currentRound = 1;
@@ -133,6 +135,7 @@ public class Game implements Serializable{
         currentRound++;
     }
     public void addTileToBoard(Tile tile) {
+        //TODO: 5) when a tile is added to the board should be uncovered, the tile t should be covered, so call the apposite constructor passing the covered parameter as true
         Tile t = new Tile(tile.getNumtile(),tile.getColor_tile());
         boardTiles[numTilesInBoard++]=t;
     }

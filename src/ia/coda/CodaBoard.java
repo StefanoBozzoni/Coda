@@ -31,9 +31,11 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     private boolean changeismade = false;
     private Game codaGame;
     private boolean isPlayer1Turn = true;
+    GuessField mGuessField=null; //added
 
     @Override
     public void onButtonOkGuessedField(int numberoftile, Colore color, JLabel label) {
+        mGuessField=null; //added
 
         if (isPlayer1Turn) {
             //String s = JOptionPane.showInputDialog("Guess the t3ile number");
@@ -49,7 +51,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
             if ((numTile.equals(String.valueOf(numberoftile)) && (colorTile.equals(String.valueOf(color))))) {
 
-                fieldPanel.add(label);
+                //removed: fieldPanel.add(label);
                 codaGame.addTileToBoard(clickedTile);
                 codaGame.getPlayers()[1].deleteTile(clickedTile);
 
@@ -484,7 +486,9 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
                             if (codaGame.canUserStartGuessing()) {
-                                new GuessField().show(thisForm, label);
+                                if (mGuessField==null) mGuessField=new GuessField(); //added
+                                if (!mGuessField.isShowing())  //added
+                                    mGuessField.show(thisForm, label);
                             }
 
                         }
@@ -544,11 +548,9 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     }//GEN-LAST:event_InstructionsActionPerformed
 
     private void DrawActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DrawActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_DrawActionPerformed
 
     private void messagePlayer2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messagePlayer2ActionPerformed
-
     }//GEN-LAST:event_messagePlayer2ActionPerformed
 
     private void loadMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadMenuItemActionPerformed

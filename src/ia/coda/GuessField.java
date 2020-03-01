@@ -30,7 +30,6 @@ public class GuessField extends javax.swing.JFrame {
         initComponents();
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -128,9 +127,7 @@ public class GuessField extends javax.swing.JFrame {
            this.dispose();
         }
         catch (Exception e) {
-        }
-        
-// TODO add your handling code here:
+        }        
     }//GEN-LAST:event_OKbuttonActionPerformed
 
     private void CancelbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelbuttonActionPerformed
