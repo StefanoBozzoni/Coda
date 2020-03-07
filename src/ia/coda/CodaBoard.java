@@ -37,8 +37,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     public void onButtonOkGuessedField(int numberoftile, Colore color, JLabel label) {
         mGuessField=null; //added
 
-        if (isPlayer1Turn) {
-            //String s = JOptionPane.showInputDialog("Guess the t3ile number");
+        if (isPlayer1Turn) {  
             System.out.println(label.getName());
             String labelClicked = label.getName();
             String[] strings = labelClicked.split("_");
@@ -51,7 +50,6 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
             if ((numTile.equals(String.valueOf(numberoftile)) && (colorTile.equals(String.valueOf(color))))) {
 
-                //removed: fieldPanel.add(label);
                 codaGame.addTileToBoard(clickedTile);
                 codaGame.getPlayers()[1].deleteTile(clickedTile);
 
@@ -61,15 +59,9 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 int dialogueButton = 0;
                 int dialogResult = JOptionPane.showConfirmDialog(null, "Correct!\nWould You Like To Continue?\n", "Correct", dialogueButton);
                 if (dialogResult != 0) { //no continue                   
-                    //removed: JLabel tileToAddlbl = new JLabel("");
-                    //removed: tileToAddlbl.setIcon(labelDrew.getIcon());
-                    //removed: tileToAddlbl.setName("Label_" + codaGame.getPlayers()[0].getNumTiles());
-                    //removed: player1Panel.add(tileToAddlbl);                   
                     Player player1 = codaGame.getPlayers()[0];
-                    Tile drewTile = codaGame.getTileDrew();
-                    player1.addTile(drewTile.getNumtile(), drewTile.getColor_tile());
-                    //removed: labelDrew.setIcon(null);
-                    //removed: labelDrew.revalidate();
+                    Tile drewTile = codaGame.getTileDrew();                 
+                    player1.addTile(drewTile.getNumtile(), drewTile.getColor_tile(),false);
                     codaGame.setTileDrew(null);
                     codaGame.getPlayers()[0].sortPlayerTiles(); //added
                     doGamePlayer2();
@@ -78,14 +70,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 //wrong answer
                 isPlayer1Turn = false;
                 javax.swing.JOptionPane.showMessageDialog(null, "Opss! Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE);
-                //removed: JLabel tileToAddlbl = new JLabel("");
-                //removed: tileToAddlbl.setIcon(labelDrew.getIcon());
-                //removed: tileToAddlbl.setName(labelDrew.getName());
-                //removed: fieldPanel.add(tileToAddlbl);
                 codaGame.addTileToBoard(codaGame.getTileDrew()); //added
-
-                //removed: labelDrew.setIcon(null);
-                //removed: labelDrew.revalidate();
                 codaGame.setTileDrew(null);
                 codaGame.nextTurn();
                 doGamePlayer2();
@@ -94,6 +79,15 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
         clearGameBoard();
         displayGameUno();
+        
+        //DONE, if the player 1 or 2 win, shows it and stop the game
+        for (int i=0;i<2;i++) {
+            if (codaGame.getPlayers()[i].getNumTiles()==0) {
+                javax.swing.JOptionPane.showMessageDialog(null, "PLAYER "+i+" WON!", "", javax.swing.JOptionPane.WARNING_MESSAGE);
+                codaGame.playerCanDraw(false);
+                codaGame.setUserCanGuess(false);
+            }
+        }
 
     }
 
@@ -114,13 +108,9 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
      * Creates new form Coda
      */
     public CodaBoard() {
-        //StartFrame startframe = new StartFrame();
         initComponents();
         initGame(); //added
         addMainListeners();
-        //removed: codaGame = new Game();
-        //removed: addMainListeners();
-        //removed: displayGameUno();
     }
 
     void saveGame() {
@@ -155,32 +145,18 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         Colore colorGuess = Colore.values()[rnd.nextInt(2)];
         Tile chosenTile = player1.getPlayerTiles()[position];
 
-        //removed: position = 0;
-        //removed: colorGuess = Colore.BLACK;
-
         if (chosenTile.getNumtile() == numberGuess && chosenTile.getColor_tile() == colorGuess) {
-
-            //removed: JLabel lbl = (JLabel) player1Panel.getComponent(position);
-            //removed: fieldPanel.add(lbl);
             codaGame.addTileToBoard(chosenTile);
             player1.deleteTile(chosenTile);
             messagePlayer2.setText("Player 2 Guessed Right");
             javax.swing.JOptionPane.showMessageDialog(null, "Player 2 Guessed Right", "Correct", javax.swing.JOptionPane.WARNING_MESSAGE); //Added
-            //pack();
             doGamePlayer2();
 
         } else {
             javax.swing.JOptionPane.showMessageDialog(null, "Player 2 Guessed Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE); //Added
             messagePlayer2.setText("Player 2 Guessed Wrong");
-            //removed: JLabel tileToAddlbl = new JLabel("");
-            //removed: tileToAddlbl.setIcon(labelDrew.getIcon());
-            //removed: tileToAddlbl.setName(labelDrew.getName());
-            //removed: fieldPanel.add(tileToAddlbl);
             codaGame.addTileToBoard(drewTile);
-            //removed: labelDrew.setIcon(null);
-            //removed: labelDrew.revalidate();
             codaGame.setTileDrew(null);
-            //pack();
             codaGame.playerCanDraw(true);
             codaGame.nextTurn();
 
@@ -455,7 +431,6 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
             label.setIcon(new ImageIcon("./" + currentTile.getFileName()));
             label.setName("Label_" + i);
             player1Panel.add(label);
-
         }
 
         for (int k = 0; k < codaGame.getNumOfBoardTiles(); k++) {
@@ -467,6 +442,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
         if (codaGame.getTileDrew() != null) {
             Tile tileDrew = codaGame.getTileDrew();
+            tileDrew.reveal();  //added
             labelDrew.setIcon(new ImageIcon("./" + tileDrew.getFileName()));
             labelDrew.setName("label_" + tileDrew.getNumtile());
         }
@@ -477,6 +453,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
             label.setIcon(new ImageIcon("./" + currentTile.getFileName()));
             label.setName("Label_" + j);
             player2Panel.add(label);
+            System.out.print(" - "+currentTile.getNumtile());
             IGuessedField thisForm = this;
 
             label.addMouseListener(new MouseAdapter() {
@@ -496,6 +473,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
                 }
             });
         }
+        System.out.println();
 
         pack();
     }

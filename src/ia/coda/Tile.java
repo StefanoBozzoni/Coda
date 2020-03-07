@@ -17,11 +17,11 @@ enum Colore {
  *
  * @author silviogao
  */
-public class Tile implements Serializable{
+public class Tile implements Serializable {
 
     private Colore color_tile;
     private int numtile;
-    
+
     private boolean covered = true;
 
     Tile(int ptile, Colore pcolor) {
@@ -49,14 +49,16 @@ public class Tile implements Serializable{
     public int getNumtile() {
         return numtile;
     }
-    
-    public String getFileName(){
-        //TODO: 1) if the tile is covered (covered==true) return a covered image file otherwhise leave the actual beahaviour
-        if (color_tile == BLACK){
-            return "/images/Tile" + numtile + ".png";
-        }
-        else{
-            return "/images/Tile" + String.valueOf(numtile+12) + ".png";
+
+    public String getFileName() {
+        if (covered) {
+            return "/images/Cover3.png"; //DONE: 1) if the tile is covered (covered==true) return a covered image file otherwhise leave the actual beahaviour
+        } else {
+            if (color_tile == BLACK) {
+                return "/images/Tile" + numtile + ".png";
+            } else {
+                return "/images/Tile" + String.valueOf(numtile + 12) + ".png";
+            }
         }
     }
 }

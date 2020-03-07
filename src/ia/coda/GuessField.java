@@ -46,7 +46,7 @@ public class GuessField extends javax.swing.JFrame {
         OKbutton = new javax.swing.JButton();
         Cancelbutton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         TileNumber.setText("Insert a number: from 0 to 11");
 
