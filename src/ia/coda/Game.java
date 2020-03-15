@@ -11,12 +11,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-
 /**
  *
  * @author silviogao
  */
-public class Game implements Serializable{
+public class Game implements Serializable {
 
     private Player[] players;
     private Deck deck;
@@ -24,23 +23,22 @@ public class Game implements Serializable{
     private int currentRound;
     private boolean userStartGuessing = false;
     private boolean playerCanDraw;
-    private Tile tileDrew; 
+    private Tile tileDrew;
     private Tile[] boardTiles = new Tile[Deck.TOTAL_NUMBERS_OF_TILES];
-    private int numTilesInBoard=0;
-
+    private int numTilesInBoard = 0;
 
     public Tile getTileDrew() {
         return tileDrew;
     }
 
     public void setTileDrew(Tile tileDrew) {
-        if (tileDrew!=null) {
+        if (tileDrew != null) {
             //DONE: 3) set the tileDrew as covered passing the right parameter in the following Tile costructor
-            Tile t = new Tile(tileDrew.getNumtile(),tileDrew.getColor_tile(),true);
+            Tile t = new Tile(tileDrew.getNumtile(), tileDrew.getColor_tile(), true);
             this.tileDrew = t;
+        } else {
+            this.tileDrew = null;
         }
-        else
-            this.tileDrew=null;
     }
 
     public Game() {
@@ -58,7 +56,7 @@ public class Game implements Serializable{
         userStartGuessing = false;
         playerCanDraw = true;
         currentRound = 1;
-        
+
     }
 
     public boolean canPlayerDraw() {
@@ -80,11 +78,11 @@ public class Game implements Serializable{
     void shuffle(Deck mydeck) {
         mydeck.shuffle();
     }
-    
+
     boolean isPlayer1Turn() {
-        return (currentPlayer==1);
+        return (currentPlayer == 1);
     }
-   
+
     void distribute() {
         Tile[] array = deck.distribute();
         Tile[] array1 = new Tile[4];
@@ -92,9 +90,9 @@ public class Game implements Serializable{
 
         for (int i = 0; i < 4; i++) {
             array1[i] = array[i];
-            array1[i].reveal(); //added
+            array1[i].reveal();
         }
-       
+
         players[0].setPlayerTiles(array1);
         for (int j = 0; j < 4; j++) {
             array2[j] = array[j + 4];
@@ -103,10 +101,89 @@ public class Game implements Serializable{
         return;
     }
 
+    public void doGamePlayer1(int numberoftile, Colore color, JLabel label) {
+        if (currentPlayer == 1) {
+            System.out.println(label.getName());
+            String labelClicked = label.getName();
+            String[] strings = labelClicked.split("_");
+            int number = Integer.valueOf(strings[1]);
+            Tile clickedTile = getPlayers()[1].getPlayerTiles()[number];
+            System.out.println(clickedTile.getNumtile());
+
+            String numTile = String.valueOf(clickedTile.getNumtile());
+            String colorTile = String.valueOf(clickedTile.getColor_tile());
+
+            if ((numTile.equals(String.valueOf(numberoftile)) && (colorTile.equals(String.valueOf(color))))) {
+
+                addTileToBoard(clickedTile);
+                getPlayers()[1].deleteTile(clickedTile);
+
+                int dialogButton = JOptionPane.YES_NO_OPTION;
+                int dialogueButton = 0;
+                int dialogResult = JOptionPane.showConfirmDialog(null, "Correct!\nWould You Like To Continue?\n", "Correct", dialogueButton);
+                if (dialogResult != 0) { //no continue                   
+                    Player player1 = getPlayers()[0];
+                    Tile drewTile = getTileDrew();
+                    player1.addTile(drewTile.getNumtile(), drewTile.getColor_tile(), false);
+                    setTileDrew(null);
+                    getPlayers()[0].sortPlayerTiles();
+                    nextTurn(); //added
+                }
+            } else {
+                //wrong answer
+                javax.swing.JOptionPane.showMessageDialog(null, "Opss! Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE);
+                addTileToBoard(getTileDrew());
+                setTileDrew(null);
+                nextTurn();
+            }
+
+        }
+    }
+
+    public void doGamePlayer2(javax.swing.JTextField messagePlayer2) {
+
+        int numberoftile;
+        Colore color;
+        JLabel label;
+        Random rnd = new Random();
+        Player player1 = getPlayers()[0];
+
+        Tile drewTile = draw();
+        setTileDrew(drewTile);
+        //labelDrew.setIcon(new ImageIcon("./" + drewTile.getFileName())); removed
+        //labelDrew.setName("label_" + drewTile.getNumtile()); removed
+
+        int position = rnd.nextInt(player1.getNumTiles() - 1);
+        int numberGuess = rnd.nextInt(12);
+        Colore colorGuess = Colore.values()[rnd.nextInt(2)];
+        Tile chosenTile = player1.getPlayerTiles()[position];
+
+        if (chosenTile.getNumtile() == numberGuess && chosenTile.getColor_tile() == colorGuess) {
+            addTileToBoard(chosenTile);
+            player1.deleteTile(chosenTile);
+            messagePlayer2.setText("Player 2 Guessed Right");
+            javax.swing.JOptionPane.showMessageDialog(null, "Player 2 Guessed Right", "Correct", javax.swing.JOptionPane.WARNING_MESSAGE);
+            doGamePlayer2(messagePlayer2);
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(null, "Player 2 Guessed Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE);
+            messagePlayer2.setText("Player 2 Guessed Wrong");
+            addTileToBoard(drewTile);
+            setTileDrew(null);
+            playerCanDraw(true);
+            nextTurn();
+        }
+
+        setUserCanGuess(false);
+        playerCanDraw(true);
+        getPlayers()[1].sortPlayerTiles();
+    }
+
+    /*
     Tile draw(Deck mydeck) {
         return mydeck.draw();
     }
-    
+     */
     Tile draw() {
         return deck.draw();
     }
@@ -122,32 +199,36 @@ public class Game implements Serializable{
     public int getCurrentPlayerNum() {
         return currentPlayer;
     }
-    
+
     public Player getCurrentPlayer() {
         return players[currentPlayer];
     }
-    
+
     public int getCurrentRound() {
         return currentRound;
     }
-    public void nextTurn(){
-        if(currentPlayer==1){
-            currentPlayer=2;
-        }else{
-            currentPlayer=1;
+
+    public void nextTurn() {
+        if (currentPlayer == 1) {
+            currentPlayer = 2;
+        } else {
+            currentPlayer = 1;
         }
-        currentRound++;
+        if (currentPlayer == 1) {
+            currentRound++; //added
+        }
     }
+
     public void addTileToBoard(Tile tile) {
         //DONE: 5) when a tile is added to the board should be uncovered, the tile t should be uncovered, so call the apposite constructor passing the covered parameter as false
-        Tile t = new Tile(tile.getNumtile(),tile.getColor_tile(),false);
-        boardTiles[numTilesInBoard++]=t;
+        Tile t = new Tile(tile.getNumtile(), tile.getColor_tile(), false);
+        boardTiles[numTilesInBoard++] = t;
     }
-   
+
     public Tile[] getBoardTiles() {
         return boardTiles;
     }
-    
+
     public int getNumOfBoardTiles() {
         return numTilesInBoard;
     }

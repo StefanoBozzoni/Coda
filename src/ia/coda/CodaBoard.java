@@ -24,7 +24,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author silviogao
+ * @author silviogaod
  */
 public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
 
@@ -36,51 +36,18 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     @Override
     public void onButtonOkGuessedField(int numberoftile, Colore color, JLabel label) {
         mGuessField=null; //added
+ 
+        codaGame.doGamePlayer1(numberoftile, color, label);
+        displayGameUno();
 
-        if (isPlayer1Turn) {  
-            System.out.println(label.getName());
-            String labelClicked = label.getName();
-            String[] strings = labelClicked.split("_");
-            int number = Integer.valueOf(strings[1]);
-            Tile clickedTile = codaGame.getPlayers()[1].getPlayerTiles()[number];
-            System.out.println(clickedTile.getNumtile());
-
-            String numTile = String.valueOf(clickedTile.getNumtile());
-            String colorTile = String.valueOf(clickedTile.getColor_tile());
-
-            if ((numTile.equals(String.valueOf(numberoftile)) && (colorTile.equals(String.valueOf(color))))) {
-
-                codaGame.addTileToBoard(clickedTile);
-                codaGame.getPlayers()[1].deleteTile(clickedTile);
-
-                changeismade = true;
-                pack();
-                int dialogButton = JOptionPane.YES_NO_OPTION;
-                int dialogueButton = 0;
-                int dialogResult = JOptionPane.showConfirmDialog(null, "Correct!\nWould You Like To Continue?\n", "Correct", dialogueButton);
-                if (dialogResult != 0) { //no continue                   
-                    Player player1 = codaGame.getPlayers()[0];
-                    Tile drewTile = codaGame.getTileDrew();                 
-                    player1.addTile(drewTile.getNumtile(), drewTile.getColor_tile(),false);
-                    codaGame.setTileDrew(null);
-                    codaGame.getPlayers()[0].sortPlayerTiles(); //added
-                    doGamePlayer2();
-                }
-            } else {
-                //wrong answer
-                isPlayer1Turn = false;
-                javax.swing.JOptionPane.showMessageDialog(null, "Opss! Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE);
-                codaGame.addTileToBoard(codaGame.getTileDrew()); //added
-                codaGame.setTileDrew(null);
-                codaGame.nextTurn();
-                doGamePlayer2();
-            }
+        if (codaGame.getCurrentPlayerNum()==2) {
+            codaGame.doGamePlayer2(messagePlayer2);
+            displayGameUno();
         }
 
-        clearGameBoard();
-        displayGameUno();
+        displayTurnRound();
         
-        //DONE, if the player 1 or 2 win, shows it and stop the game
+        //if the player 1 or 2 win, shows it and stop the game
         for (int i=0;i<2;i++) {
             if (codaGame.getPlayers()[i].getNumTiles()==0) {
                 javax.swing.JOptionPane.showMessageDialog(null, "PLAYER "+i+" WON!", "", javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -90,6 +57,8 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         }
 
     }
+    
+    
 
     private void clearGameBoard() {
         player1Panel.removeAll();
@@ -125,51 +94,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
         displayGameUno();
     }
 
-    void doGamePlayer2() {
-        clearGameBoard(); //added to display game before player2 play
-        displayGameUno(); //added
-        
-        int numberoftile;
-        Colore color;
-        JLabel label;
-        Random rnd = new Random();
-        Player player1 = codaGame.getPlayers()[0];
-
-        Tile drewTile = codaGame.draw();
-        codaGame.setTileDrew(drewTile);
-        labelDrew.setIcon(new ImageIcon("./" + drewTile.getFileName()));
-        labelDrew.setName("label_" + drewTile.getNumtile());
-
-        int position = rnd.nextInt(player1.getNumTiles() - 1);
-        int numberGuess = rnd.nextInt(12);
-        Colore colorGuess = Colore.values()[rnd.nextInt(2)];
-        Tile chosenTile = player1.getPlayerTiles()[position];
-
-        if (chosenTile.getNumtile() == numberGuess && chosenTile.getColor_tile() == colorGuess) {
-            codaGame.addTileToBoard(chosenTile);
-            player1.deleteTile(chosenTile);
-            messagePlayer2.setText("Player 2 Guessed Right");
-            javax.swing.JOptionPane.showMessageDialog(null, "Player 2 Guessed Right", "Correct", javax.swing.JOptionPane.WARNING_MESSAGE); //Added
-            doGamePlayer2();
-
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(null, "Player 2 Guessed Wrong", "Incorrect", javax.swing.JOptionPane.WARNING_MESSAGE); //Added
-            messagePlayer2.setText("Player 2 Guessed Wrong");
-            codaGame.addTileToBoard(drewTile);
-            codaGame.setTileDrew(null);
-            codaGame.playerCanDraw(true);
-            codaGame.nextTurn();
-
-            isPlayer1Turn = true;
-        }
- 
-        displayTurnRound();
-        codaGame.setUserCanGuess(false);
-        codaGame.playerCanDraw(true); //moved
-        codaGame.getPlayers()[1].sortPlayerTiles(); //added
-
-    }
-
+   
     private void displayTurnRound() {
         numberOfRound.setText(Integer.toString(codaGame.getCurrentRound()));
     }
@@ -420,6 +345,7 @@ public class CodaBoard extends javax.swing.JFrame implements IGuessedField {
     }
 
     void displayGameUno() {
+        clearGameBoard();
         displayTurnRound();
         //Problem with displaying Tiles
         Player player1 = codaGame.getPlayers()[0];
